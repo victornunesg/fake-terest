@@ -3,4 +3,4 @@ from myproject import app, database
 from myproject.models import User, Photo
 
 with app.app_context():
-    database.create_all()  # creating database
+    print(User)

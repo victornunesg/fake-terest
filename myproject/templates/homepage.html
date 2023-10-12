@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>
-        {% block titulo %}
+        {% block title %}
         FakeTerest
         {% endblock %}
     </title>
@@ -11,8 +11,23 @@
 
 {% block body %}
     <body>
-    <h1>FakeTerest - seja bem vindo!</h1>
-    <h2>Site em construção...</h2>
+    <h1>FakeTerest - Welcome!</h1>
+    <h2>Under construction...</h2>
+
+    {% block form %}
+    <form method="POST">
+        {{ form.csrf_token }}
+
+        {{ form.email.label() }}
+        {{ form.email() }}
+
+        {{ form.password.label() }}
+        {{ form.password() }}
+
+        {{ form.login_button() }}
+    </form>
+    {% endblock %}
+
     </body>
 {% endblock %}
 

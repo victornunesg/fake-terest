@@ -20,6 +20,6 @@ class User(db.Model, UserMixin):  # it is a subclass of Model, from database
 
 class Photo(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    image = db.Column(db.String, default="default.png")
+    image = db.Column(db.String, default="default.jpg")
     creation_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

@@ -1,15 +1,48 @@
 # file to define website routes/links
-from flask import render_template, url_for
-from myproject import app
-from flask_login import login_required
+from flask import render_template, url_for, redirect
+from myproject import app, database, bcrypt
+from flask_login import login_required, login_user, logout_user, current_user
+from myproject.forms import FormLogin, FormCreateAccount
+from myproject.models import User, Photo
 
 
-@app.route("/")  # creating a new route/link to your site
+@app.route("/", methods=["GET", "POST"])  # creating a new route/link to your site
 def homepage():
-    return render_template("homepage.html")
+    formlogin = FormLogin()
+    if formlogin.validate_on_submit():
+        user = User.query.filter_by(email=formlogin.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, formlogin.password.data):
+            login_user(user)
+            return redirect(url_for("profile", user_id=user.id))
+    return render_template("homepage.html", form=formlogin)
 
 
-@app.route("/perfil/<usuario>")  # pass a variable called 'usuario', to load a specific user page
+@app.route("/createaccount", methods=["GET", "POST"])
+def createaccount():
+    formcreateaccount = FormCreateAccount()
+    if formcreateaccount.validate_on_submit():
+        encrypt_password = bcrypt.generate_password_hash(formcreateaccount.password.data)
+        new_user = User(email=formcreateaccount.email.data, username=formcreateaccount.username.data,
+                        password=encrypt_password)
+        database.session.add(new_user)
+        database.session.commit()
+        login_user(new_user)
+        return redirect(url_for("profile", user_id=new_user.id))
+    return render_template("createaccount.html", form=formcreateaccount)
+
+
+@app.route("/profile/<user_id>")  # pass a variable called 'usuario', to load a specific user page
 @login_required
-def perfil(usuario):
-    return render_template("perfil.html", usuario=usuario)  # usuario is the same variable to use inside html file
+def profile(user_id):
+    if int(user_id) == int(current_user.id):
+        return render_template("profile.html", user=current_user)  # usuario is the same variable to use inside html file
+    else:
+        user = User.query.get(int(user_id))
+        return render_template("profile.html", user=user)  # usuario is the same variable to use inside html file
+
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for("homepage"))

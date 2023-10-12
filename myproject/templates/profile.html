@@ -1,0 +1,17 @@
+{% extends "homepage.html" %}
+
+{% block title %}
+Profile - {{ user }}
+{% endblock %}
+
+{% block body %}
+<body>
+<h1>User profile: {{ user.username }}</h1>
+
+<a href="{{ url_for('logout') }}">Exit</a>
+
+{% for photo in user.photos %}
+<img src="">
+{% endfor %}
+</body>
+{% endblock %}
