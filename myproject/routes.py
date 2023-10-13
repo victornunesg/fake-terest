@@ -2,8 +2,10 @@
 from flask import render_template, url_for, redirect
 from myproject import app, database, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
-from myproject.forms import FormLogin, FormCreateAccount
+from myproject.forms import FormLogin, FormCreateAccount, FormPhoto
 from myproject.models import User, Photo
+from werkzeug.utils import secure_filename
+import os
 
 
 @app.route("/", methods=["GET", "POST"])  # creating a new route/link to your site
@@ -31,14 +33,18 @@ def createaccount():
     return render_template("createaccount.html", form=formcreateaccount)
 
 
-@app.route("/profile/<user_id>")  # pass a variable called 'usuario', to load a specific user page
+@app.route("/profile/<user_id>", methods=["GET", "POST"])  # pass a variable called 'usuario', to load a specific user page
 @login_required
 def profile(user_id):
     if int(user_id) == int(current_user.id):
-        return render_template("profile.html", user=current_user)  # usuario is the same variable to use inside html file
+        form_photo = FormPhoto()
+        if form_photo.validate_on_submit():
+            file = form_photo.photo.data
+            safe_name = secure_filename(file.filename)
+        return render_template("profile.html", user=current_user, form=form_photo)  # user is the same variable to use inside html file
     else:
         user = User.query.get(int(user_id))
-        return render_template("profile.html", user=user)  # usuario is the same variable to use inside html file
+        return render_template("profile.html", user=user, form=None)  # user is the same variable to use inside html file
 
 
 @app.route("/logout")

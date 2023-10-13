@@ -1,6 +1,6 @@
 # file to define website forms
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField
+from wtforms import StringField, PasswordField, SubmitField, FileField
 from wtforms.validators import DataRequired, Email, EqualTo, Length, ValidationError
 from myproject.models import User
 
@@ -22,3 +22,8 @@ class FormCreateAccount(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user:
             raise ValidationError("E-mail already registered. Sign up with a different e-mail or Sign in to continue.")
+
+
+class FormPhoto(FlaskForm):
+    photo = FileField("Photo", validators=[DataRequired()])
+    upload_button = SubmitField("Upload photo")

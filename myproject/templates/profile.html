@@ -1,17 +1,23 @@
 {% extends "homepage.html" %}
 
 {% block title %}
-Profile - {{ user }}
+    Profile - {{ user }}
 {% endblock %}
 
 {% block body %}
-<body>
-<h1>User profile: {{ user.username }}</h1>
+    <body>
+        <h1>User profile: {{ user.username }}</h1>
+        {% for photo in user.photos %}
+        {% endfor %}
+    </body>
+    {% if form %}
+        <form method="POST" enctype="multipart/form-data">
+            {{ form.csrf_token }}
 
-<a href="{{ url_for('logout') }}">Exit</a>
-
-{% for photo in user.photos %}
-<img src="">
-{% endfor %}
-</body>
+            {{ form.photo }}
+            {{ form.upload_button }}
+        </form>
+    {% endif %}
+    <img src=" {{ url_for('static', filename='posts_photos/default.jpg') }}">
+    <a href="{{ url_for('logout') }}">Exit</a>
 {% endblock %}

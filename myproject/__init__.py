@@ -9,6 +9,7 @@ app = Flask(__name__)  # initiating Flask object, the app itself
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///database.db"  # configuring database local (standard)
 app.config['SECRET_KEY'] = "da59332b26c23c31296ffad51bd953da"  # to make sure app security print(secrets.token_hex(16))
+app.config['UPLOAD_FOLDER'] ="static/posts_photos"  # default folder to storage posts photos
 
 database = SQLAlchemy(app)  # creating database
 bcrypt = Bcrypt(app)  # creating Bcrypt object
