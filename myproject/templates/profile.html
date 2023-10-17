@@ -6,9 +6,8 @@
 
 {% block body %}
     <body>
+        {% include "navbar.html" %}
         <h1>User profile: {{ user.username }}</h1>
-        {% for photo in user.photos %}
-        {% endfor %}
     </body>
     {% if form %}
         <form method="POST" enctype="multipart/form-data">
@@ -18,6 +17,10 @@
             {{ form.upload_button }}
         </form>
     {% endif %}
-    <img src=" {{ url_for('static', filename='posts_photos/default.jpg') }}">
-    <a href="{{ url_for('logout') }}">Exit</a>
+
+    {% for photo in user.photos %}
+        <img src=" {{ url_for('static', filename='posts_photos/{}'.format(photo.image)) }}">
+    {% endfor %}
+
+
 {% endblock %}
