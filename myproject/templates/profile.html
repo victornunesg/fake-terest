@@ -1,26 +1,54 @@
 {% extends "homepage.html" %}
 
 {% block title %}
-    Profile - {{ user }}
+    My Profile - {{ user }}
 {% endblock %}
 
 {% block body %}
-    <body>
-        {% include "navbar.html" %}
-        <h1>User profile: {{ user.username }}</h1>
-    </body>
-    {% if form %}
-        <form method="POST" enctype="multipart/form-data">
-            {{ form.csrf_token }}
+  <body>
+    {% include "navbar.html" %}
 
-            {{ form.photo }}
-            {{ form.upload_button }}
-        </form>
+    {% if form %}
+        <div class="container">
+            <form class="bloco-add-img" method="POST" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <h2>{{ user.username }} - Upload photo</h2>
+
+                <div class="bloco-arquivo">
+                    <label for="foto" class="botao-arquivo">
+                        Select file
+                        {{ form.photo(class="input-arquivo", id="foto") }}
+                    </label>
+                    <span id="imagem-arquivo" class=""></span>
+                </div>
+                {{ form.upload_button(class="botao-login") }}
+            </form>
+        </div>
     {% endif %}
 
-    {% for photo in user.photos %}
-        <img src=" {{ url_for('static', filename='posts_photos/{}'.format(photo.image)) }}">
-    {% endfor %}
+    <div class="conteudo">
+        {% for photo in user.photos %}
+            <div class="bloco-imagem">
+                <img src="{{ url_for('static', filename='posts_photos/{}'.format(photo.image)) }}"/>
+            </div>
+        {% endfor %}
+    </div>
 
+    <script>
+        let input = document.getElementById("foto");
+        let imagemArquivo = document.getElementById("imagem-arquivo");
+
+        input.addEventListener("change", () => {
+            let inputImagem = document.querySelector("input[type=file]").files[0];
+
+            imagemArquivo.classList.add("visivel");
+            imagemArquivo.innerText = inputImagem.name;
+        });
+    </script>
+
+  </body>
 
 {% endblock %}
+
+
+
