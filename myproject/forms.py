@@ -10,6 +10,11 @@ class FormLogin(FlaskForm):
     password = PasswordField("Password", validators=[DataRequired()])
     login_button = SubmitField("Sign in")
 
+    def validate_email(self, email):
+        user = User.query.filter_by(email=email.data).first()
+        if not user:
+            raise ValidationError("E-mail not found. Create an account to continue.")
+
 
 class FormCreateAccount(FlaskForm):
     username = StringField("Username", validators=[DataRequired()])

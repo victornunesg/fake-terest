@@ -1,5 +1,5 @@
 # file to define website routes/links
-from flask import render_template, url_for, redirect
+from flask import render_template, url_for, redirect, flash, request
 from myproject import app, database, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from myproject.forms import FormLogin, FormCreateAccount, FormPhoto
@@ -11,11 +11,13 @@ import os
 @app.route("/", methods=["GET", "POST"])  # creating a new route/link to your site
 def homepage():
     formlogin = FormLogin()
-    if formlogin.validate_on_submit():
+    if formlogin.validate_on_submit() and 'login_button' in request.form:
         user = User.query.filter_by(email=formlogin.email.data).first()
         if user and bcrypt.check_password_hash(user.password, formlogin.password.data):
             login_user(user)
             return redirect(url_for("profile", user_id=user.id))
+        else:
+            flash('Log in failure, wrong e-mail or password', 'alert-danger')
     return render_template("homepage.html", form=formlogin)
 
 

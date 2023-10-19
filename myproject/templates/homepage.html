@@ -67,11 +67,21 @@
 
               <div class="div-input">
                 {{ form.email.label(class="label") }}
+                {% if form.email.errors %}
+                  {% for erro in form.email.errors %}
+                    <p style="color:red">{{ erro }}</p>
+                  {% endfor %}
+                {% endif %}
                 {{ form.email(class="input") }}
               </div>
 
               <div class="div-input">
                 {{ form.password.label(class="label") }}
+                {% if form.password.errors %}
+                  {% for erro in form.password.errors %}
+                    <p style="color:red">{{ erro }}</p>
+                  {% endfor %}
+                {% endif %}
                 {{ form.password(class="input") }}
               </div>
 

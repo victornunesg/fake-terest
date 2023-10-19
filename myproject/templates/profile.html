@@ -24,6 +24,10 @@
                 {{ form.upload_button(class="botao-login") }}
             </form>
         </div>
+    {% else %}
+        <div class="bloco-add-img">
+            <h2>{{ user.username }} - <a href="{{ url_for('profile', user_id=user.id) }}">See profile</a></h2>
+        </div>
     {% endif %}
 
     <div class="conteudo">
