@@ -4,6 +4,7 @@ from myproject import app, database, bcrypt
 from flask_login import login_required, login_user, logout_user, current_user
 from myproject.forms import FormLogin, FormCreateAccount, FormPhoto
 from myproject.models import User, Photo
+from wtforms import ValidationError
 from werkzeug.utils import secure_filename
 import os
 
